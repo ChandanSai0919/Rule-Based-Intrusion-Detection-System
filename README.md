@@ -1,6 +1,8 @@
 # Rule-Based Intrusion Detection System
 
 A Network Intrusion Detection System that analyzes network traffic features and detects potential intrusions using a trained machine learning model.
+![Traffic Analysis Form 1](Traffic%20Anaylsis%281%29.png)
+![Traffic Analysis Form 2](Traffic%20Anaylsis%20%282%29.png)
 
 ## Tech Stack
 Python, Flask, Flask-SocketIO, PyShark, scikit-learn, pandas, joblib
