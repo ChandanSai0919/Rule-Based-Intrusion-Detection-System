@@ -17,3 +17,6 @@ Python, Flask, Flask-SocketIO, PyShark, scikit-learn, pandas, joblib
 
 ## Dataset
 Network traffic dataset (lda.csv) with connection-level features used for training.
+
+## Note
+The trained model file (model.pkl, 33 MB) is not included in this repository due to GitHub's file size limits. All source code, preprocessing files (encoder.pkl, scaler.pkl), dataset, and notebooks are included.
