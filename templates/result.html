@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network IDS | Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><i class="fas fa-poll"></i> Analysis Results</h1>
+            <p>Network traffic classification report</p>
+        </header>
+
+        <div class="card">
+            <div class="result-card {{ 'result-danger' if label != 'normal' else 'result-normal' }}">
+                <h2 style="font-size: 2rem; margin-bottom: 1rem;">
+                    <i class="fas fa-{{ 'shield-alt' if label == 'normal' else 'exclamation-triangle' }}"></i>
+                    {{ label | upper }}
+                </h2>
+                <p style="font-size: 1.2rem; font-weight: 600;">
+                    {{ status }}
+                </p>
+                <div style="margin-top: 1.5rem;">
+                    <div class="accuracy-badge">
+                        <i class="fas fa-bullseye"></i> Model Confidence: {{ accuracy }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <a href="/" class="btn btn-primary">
+                    <i class="fas fa-redo"></i> New Analysis
+                </a>
+                <a href="/monitor" class="btn">
+                    <i class="fas fa-tv"></i> Live Monitoring
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

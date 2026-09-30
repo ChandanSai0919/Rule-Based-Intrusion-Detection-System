@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network IDS | Live Monitor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><i class="fas fa-tv"></i> Live Network Monitoring</h1>
+            <p>Real-time analysis of network packets</p>
+        </header>
+
+        <div class="card">
+            <div class="monitor-controls">
+                <button onclick="startMonitoring()" class="btn btn-primary">
+                    <i class="fas fa-play"></i> Start Monitoring
+                </button>
+                <button onclick="stopMonitoring()" class="btn btn-danger">
+                    <i class="fas fa-stop"></i> Stop Monitoring
+                </button>
+            </div>
+
+            <div class="card">
+                <h3><i class="fas fa-list"></i> Packet Log</h3>
+                <div id="packet-log" class="packet-log">
+                    <div class="packet-entry packet-info">Ready to monitor network traffic...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="link-container">
+            <a href="/" class="btn">
+                <i class="fas fa-arrow-left"></i> Back to Analysis
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const socket = io.connect('http://' + document.domain + ':' + location.port);
+        const packetLog = document.getElementById('packet-log');
+
+        socket.on('new_packet', function(data) {
+            const packetEntry = document.createElement('div');
+            packetEntry.className = 'packet-entry';
+            
+            const timestamp = new Date().toLocaleTimeString();
+            packetEntry.innerHTML = `
+                <span class="timestamp">[${timestamp}]</span>
+                <span class="packet-data">${data.packet}</span>
+            `;
+            
+            packetLog.prepend(packetEntry);
+            
+            // Auto-scroll to top
+            packetLog.scrollTop = 0;
+        });
+
+        function startMonitoring() {
+            fetch('/start_monitoring')
+                .then(response => response.text())
+                .then(data => {
+                    const infoEntry = document.createElement('div');
+                    infoEntry.className = 'packet-entry packet-info';
+                    infoEntry.textContent = `🟢 ${data}`;
+                    packetLog.prepend(infoEntry);
+                });
+        }
+
+        function stopMonitoring() {
+            fetch('/stop_monitoring')
+                .then(response => response.text())
+                .then(data => {
+                    const infoEntry = document.createElement('div');
+                    infoEntry.className = 'packet-entry packet-info';
+                    infoEntry.textContent = `🔴 ${data}`;
+                    packetLog.prepend(infoEntry);
+                });
+        }
+    </script>
+</body>
+</html>

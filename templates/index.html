@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network IDS | Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><i class="fas fa-shield-alt"></i> Network Intrusion Detection System</h1>
+            <p>Analyze network traffic for potential security threats</p>
+        </header>
+
+        <div class="card">
+            <h2 class="card-title"><i class="fas fa-search"></i> Traffic Analysis</h2>
+            <p>Enter network features to detect potential intrusions:</p>
+
+            <form action="/predict" method="post" class="form-container">
+                <div class="form-grid">
+                    {% for feature in feature_names %}
+                    <div class="form-group">
+                        <label for="{{ feature }}">
+                            <i class="fas fa-{{ 'network-wired' if 'bytes' in feature or 'count' in feature 
+                                          else 'random' if 'rate' in feature 
+                                          else 'sign-in-alt' if 'login' in feature 
+                                          else 'project-diagram' if 'host' in feature 
+                                          else 'microchip' }}"></i>
+                            {{ feature | replace('_', ' ') | title }}
+                        </label>
+
+                        {% if feature == "protocol_type" %}
+                        <select id="{{ feature }}" name="{{ feature }}" class="form-control" required>
+                            <option value="" disabled selected>Select protocol</option>
+                            <option value="icmp">ICMP</option>
+                            <option value="tcp">TCP</option>
+                            <option value="udp">UDP</option>
+                        </select>
+
+                        {% elif feature == "service" %}
+                        <select id="{{ feature }}" name="{{ feature }}" class="form-control" required>
+                            <option value="IRC">IRC</option>
+                            <option value="X11">X11</option>
+                            <option value="Z39_50">Z39_50</option>
+                            <option value="aol">AOL</option>
+                            <option value="auth">Auth</option>
+                            <option value="bgp">BGP</option>
+                            <option value="courier">Courier</option>
+                            <option value="csnet_ns">CSNET_NS</option>
+                            <option value="ctf">CTF</option>
+                            <option value="daytime">Daytime</option>
+                            <option value="discard">Discard</option>
+                            <option value="domain">Domain</option>
+                            <option value="domain_u">Domain_U</option>
+                            <option value="echo">Echo</option>
+                            <option value="eco_i">ECO_I</option>
+                            <option value="ecr_i">ECR_I</option>
+                            <option value="efs">EFS</option>
+                            <option value="exec">Exec</option>
+                            <option value="finger">Finger</option>
+                            <option value="ftp">FTP</option>
+                            <option value="ftp_data">FTP_Data</option>
+                            <option value="gopher">Gopher</option>
+                            <option value="hostnames">Hostnames</option>
+                            <option value="http">HTTP</option>
+                            <option value="http_443">HTTP_443</option>
+                            <option value="imap4">IMAP4</option>
+                            <option value="iso_tsap">ISO_TSAP</option>
+                            <option value="klogin">Klogin</option>
+                            <option value="kshell">Kshell</option>
+                            <option value="ldap">LDAP</option>
+                            <option value="link">Link</option>
+                            <option value="login">Login</option>
+                            <option value="mtp">MTP</option>
+                            <option value="name">Name</option>
+                            <option value="netbios_dgm">NetBIOS_DGM</option>
+                            <option value="netbios_ns">NetBIOS_NS</option>
+                            <option value="netbios_ssn">NetBIOS_SSN</option>
+                            <option value="netstat">Netstat</option>
+                            <option value="nnsp">NNSP</option>
+                            <option value="nntp">NNTP</option>
+                            <option value="ntp_u">NTP_U</option>
+                            <option value="other">Other</option>
+                            <option value="pm_dump">PM_Dump</option>
+                            <option value="pop_2">POP_2</option>
+                            <option value="pop_3">POP_3</option>
+                            <option value="printer">Printer</option>
+                            <option value="private">Private</option>
+                            <option value="red_i">Red_I</option>
+                            <option value="remote_job">Remote_Job</option>
+                            <option value="rje">RJE</option>
+                            <option value="shell">Shell</option>
+                            <option value="smtp">SMTP</option>
+                            <option value="sql_net">SQL_Net</option>
+                            <option value="ssh">SSH</option>
+                            <option value="sunrpc">SunRPC</option>
+                            <option value="supdup">Supdup</option>
+                            <option value="systat">Systat</option>
+                            <option value="telnet">Telnet</option>
+                            <option value="tim_i">Tim_I</option>
+                            <option value="time">Time</option>
+                            <option value="urh_i">URH_I</option>
+                            <option value="urp_i">URP_I</option>
+                            <option value="uucp">UUCP</option>
+                            <option value="uucp_path">UUCP_Path</option>
+                            <option value="vmnet">VMNet</option>
+                            <option value="whois">Whois</option>
+                            <!-- Other options... -->
+                        </select>
+
+                        {% elif feature == "flag" %}
+                        <select id="{{ feature }}" name="{{ feature }}" class="form-control" required>
+                            <option value="" disabled selected>Select flag</option>
+                            <option value="SF">SF - Normal establishment</option>
+                            <option value="S0">S0 - Connection attempt</option>
+                            <option value="S1">S1 - Connection established</option>
+                            <option value="S2">S2 - Connection negotiating</option>
+                            <option value="S3">S3 - Connection closing</option>
+                            <option value="SH">SH - Connection shutdown</option>
+                            <option value="RSTO">RSTO - Reset by originator</option>
+                            <option value="RSTR">RSTR - Reset by responder</option>
+                            <option value="RSTOS0">RSTOS0 - Originator reset, SYN seen</option>
+                            <option value="REJ">REJ - Rejected connection</option>
+                            <option value="OTH">OTH - No SYN seen, just midstream traffic</option>
+                            <!-- Other options... -->
+                        </select>
+
+                        {% else %}
+                        <input type="text" id="{{ feature }}" name="{{ feature }}" class="form-control" required
+                               placeholder="Enter {{ feature | replace('_', ' ') }}">
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Analyze Traffic
+                </button>
+            </form>
+        </div>
+
+        <div class="link-container">
+            <a href="/monitor" class="btn">
+                <i class="fas fa-tv"></i> Live Monitoring
+            </a>
+        </div>
+    </div>
+</body>
+</html>
